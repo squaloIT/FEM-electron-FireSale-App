@@ -1,1 +1,13 @@
-console.log('This is an Electron application!');
+const { app, BrowserWindow } = require('electron');
+
+var mainWindow = null;
+
+app.on('ready', () => {
+  mainWindow = new BrowserWindow({ show: false });
+
+  mainWindow.loadFile(`${__dirname}/index.html`);
+
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+  })
+})
