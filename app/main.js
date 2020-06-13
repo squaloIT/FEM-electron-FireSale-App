@@ -2,6 +2,17 @@ const { app, BrowserWindow, dialog } = require('electron');
 const fs = require('fs');
 var mainWindow = null;
 
+const openFile = file => {
+  fs.readFile(file, (err, data) => {
+    if (err) {
+      console.log(err)
+      return;
+    }
+
+    mainWindow.webContents.send('file-opened', file, data.toString());
+  })
+};
+
 exports.getFile = () => {
   const files = dialog.showOpenDialog(mainWindow, {
     properties: ['multiSelections', 'openFile'],
@@ -20,15 +31,7 @@ exports.getFile = () => {
 
   if (!files) return;
 
-  console.log(files[0].toString());
-  fs.readFile(files[0], (err, data) => {
-    if (err) {
-      console.log(err)
-      return;
-    }
-
-    console.log(data.toString());
-  })
+  openFile(files[0]);
 }
 
 app.on('ready', () => {
