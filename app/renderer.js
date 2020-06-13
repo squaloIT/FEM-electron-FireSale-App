@@ -1,4 +1,5 @@
 const marked = require('marked');
+const { remote } = require('electron')
 
 const markdownView = document.querySelector('#markdown');
 const htmlView = document.querySelector('#html');
@@ -18,3 +19,9 @@ markdownView.addEventListener('keyup', event => {
   const currentContent = event.target.value;
   renderMarkdownToHtml(currentContent);
 });
+
+openFileButton.addEventListener('click', () => {
+  const mainFile = remote.require('./main');
+  console.log(mainFile);
+  mainFile.getFile();
+})
