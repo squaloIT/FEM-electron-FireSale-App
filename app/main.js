@@ -1,12 +1,33 @@
-const { app, BrowserWindow, dialog } = require('electron');
+const { app, BrowserWindow, dialog, Menu } = require('electron');
 const fs = require('fs');
 
 var mainWindow = null;
+const mainMenuTemplate = [
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'Open file',
+        accelerator: 'CommandOrControl+O'
+      },
+      {
+        label: 'Save file',
+        accelerator: 'CommandOrControl+S',
+        click() {
+          mainWindow.webContents.send('save-content')
+        }
+      },
+      {
+        label: 'Quit',
+        role: 'quit'
+      }
+    ]
+  }
+];
+const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
 const openFile = (exports.openFile = file => {
-  console.log(file)
   fs.readFile(file, (err, data) => {
-    console.log(data.toString())
     if (err) {
       console.log(err)
       return;
@@ -99,7 +120,7 @@ exports.getFile = () => {
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({ show: false });
-
+  Menu.setApplicationMenu(mainMenu);
   mainWindow.loadFile(`${__dirname}/index.html`);
 
   mainWindow.once('ready-to-show', () => {

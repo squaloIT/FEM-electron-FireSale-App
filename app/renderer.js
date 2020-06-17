@@ -100,7 +100,7 @@ openInDefaultButton.addEventListener('click', () => {
   shell.openItem(filePath)
 })
 
-saveMarkdownButton.addEventListener('click', evt => {
+const saveContent = () => {
   const fileName = mainFile.saveFile(filePath, markdownView.value);
   if (fileName) {
     filePath = fileName;
@@ -108,7 +108,11 @@ saveMarkdownButton.addEventListener('click', evt => {
     configureDisableForRevertButton(true)
     configureDisableForSaveButton(true)
   }
-});
+};
+
+saveMarkdownButton.addEventListener('click', saveContent);
+
+ipcRenderer.on('save-content', saveContent);
 
 ipcRenderer.on('file-opened', (evt, file, content) => {
   filePath = file;
@@ -152,7 +156,6 @@ markdownView.addEventListener('drop', evt => {
   markdownView.classList.remove('drag-error')
 
   if (isRightFormatOfFile(droppedFiles.length > 0 ? droppedFiles[0] : droppedFiles, acceptableFormats)) {
-    console.log(droppedFiles);
     mainFile.openFile(droppedFiles.path)
   }
 })
