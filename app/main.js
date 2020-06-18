@@ -18,12 +18,20 @@ const mainMenuTemplate = [
         }
       },
       {
+        label: 'Save HTML file',
+        accelerator: 'CommandOrControl+Shift+H',
+        click() {
+          mainWindow.webContents.send('save-html-content')
+        }
+      },
+      {
         label: 'Quit',
         role: 'quit'
       }
     ]
   }
 ];
+
 const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
 const openFile = (exports.openFile = file => {

@@ -73,7 +73,7 @@ markdownView.addEventListener('keyup', event => {
   }
 });
 
-saveHtmlButton.addEventListener('click', () => {
+const saveHTML = () => {
   const fileName = mainFile.saveHTML(htmlView.innerHTML);
 
   if (fileName) {
@@ -81,7 +81,9 @@ saveHtmlButton.addEventListener('click', () => {
     originalContent = markdownView.value;
     configureDisableForHTMLButton(true)
   }
-});
+};
+
+saveHtmlButton.addEventListener('click', saveHTML);
 
 showFileButton.addEventListener('click', () => {
   if (!filePath) {
@@ -113,6 +115,7 @@ const saveContent = () => {
 saveMarkdownButton.addEventListener('click', saveContent);
 
 ipcRenderer.on('save-content', saveContent);
+ipcRenderer.on('save-html-content', saveHTML);
 
 ipcRenderer.on('file-opened', (evt, file, content) => {
   filePath = file;
